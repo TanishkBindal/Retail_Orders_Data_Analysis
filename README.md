@@ -44,6 +44,11 @@ This project demonstrates an end-to-end data analysis pipeline on the Retail Ord
 
 ## ETL Process
 
+<div align= "center">
+ <img src="https://github.com/TanishkBindal/Retail_Orders_Data_Analysis/blob/main/ETL_Pipeline.png?raw=true"
+   width= "700" height="700"/>
+</div>
+
 ### 1. Import and Authenticate Kaggle API
 
 ```python
