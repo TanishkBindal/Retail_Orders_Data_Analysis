@@ -132,6 +132,7 @@ from df_orders
 group by product_id
 order by sales desc
  ```
+<img width="287" height="275" alt="Output -1" src="https://github.com/user-attachments/assets/f594b22f-38fc-4013-8117-35e2d7ab3999" />
 
 2. **Top 5 highest selling Products in each Region :**
 ```sql
