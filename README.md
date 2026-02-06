@@ -125,37 +125,213 @@ The following SQL queries are designed to perform data analysis with the objecti
 
 ### Queries
 
-1. **Top 10 Highest Revenue Generating Products :**
-
+1. **Top 10 highest Revenue generating Products :**
 ```sql
-select top 10 product_id,sum(sale_price) as sales
+select top 10 product_id, sum(sale_price) as sales
 from df_orders
 group by product_id
 order by sales desc
  ```
-2. **Top 5 Highest Selling Products in Each Region:**
 
+2. **Top 5 highest selling Products in each Region :**
 ```sql
 with cte as (
-select region,product_id,sum(sale_price) as sales
+select region, product_id, sum(sale_price) as sales
 from df_orders
-group by region,product_id),
+group by region, product_id ),
 ranked_cte as (
 select *
-, row_number() over(partition by region order by sales desc) as rn
-from cte) 
+, row_number() over ( partition by region order by sales desc ) as rn
+from cte  ) 
 select * from ranked_cte
-where rn<6
+where rn < 6
  ```
 
+3. **Month-over-Month growth comparison for 2022 and 2023 Sales :**
+```sql
+with cte as (
+select year(order_date) as order_year, month(order_date) as order_month,
+sum(sale_price) as sales
+from df_orders
+group by year(order_date),month(order_date)
+	)
+select order_month
+, sum(case when order_year=2022 then sales else 0 end) as sales_2022
+, sum(case when order_year=2023 then sales else 0 end) as sales_2023
+from cte 
+group by order_month
+order by order_month
+```
 
+4. **For each Category which Month had highest Sales :**
+```sql
+with cte as (
+select category, format(order_date,'yyyyMM') as order_year_month
+, sum(sale_price) as sales 
+from df_orders
+group by category, format(order_date,'yyyyMM')
+),
+ranked_cte as (
+select *,
+row_number() over(partition by category order by sales desc) as rn
+from cte)
+select * from ranked_cte
+where rn = 1
+```
 
+5. **Which Sub-Category had highest growth by Profit in 2023 compared to 2022 :**
+```sql
+with cte as (
+select sub_category, year(order_date) as order_year,
+sum(sale_price) as sales
+from df_orders
+group by sub_category, year(order_date)
+	),
+cte2 as (
+select sub_category
+, sum(case when order_year=2022 then sales else 0 end) as sales_2022
+, sum(case when order_year=2023 then sales else 0 end) as sales_2023
+from cte 
+group by sub_category
+)
+select top 1 *
+,(sales_2023-sales_2022) as diff_in_sales
+from  cte2
+order by diff_in_sales desc
+```
 
+6. **How is the business performing over time (Sales and Profit Trend) :**
+```sql
+Select 
+    year(order_date) as order_year,
+    month(order_date) as order_month,
+    sum(sale_price) as total_sales,
+    sum(profit) as total_profit
+from df_orders
+group by year(order_date), month(order_date)
+order by order_year, order_month
+```
 
+7. **Which Regions are driving most of the Revenue and Profit :** 
+```sql
+Select
+    region, sum(sale_price) as total_sales, sum(profit) as total_profit
+from df_orders
+group by region
+order by total_sales desc
+```
 
+8. **Which States are profitable and which are loss making :**
+```sql
+with state_profit as (
+    select
+        state,
+        sum(sale_price) as total_sales,
+        sum(profit) as total_profit
+    from df_orders
+    group by state
+)
+select *
+from state_profit
+where total_profit < 0
+order by total_profit
+```
 
+9. **What is average profit per order by Segment :**
+```sql
+select
+    segment,
+    round(avg(profit),2) as avg_profit_per_order
+from df_orders
+group by segment
+order by avg_profit_per_order desc
+```
 
+10. **Which Ship Modes are most profitable :**
+```sql
+select 
+    ship_mode,
+    count(order_id) as total_orders,
+    sum(profit) as total_profit
+from df_orders
+group by ship_mode
+order by total_profit desc
+```
 
+11. **What is the average order value (AOV) by Region :**
+```sql
+select 
+    region,
+    round(avg(sale_price),2) as avg_order_value
+from df_orders
+group by region
+order by avg_order_value desc
+```
+
+12. **Monthly Profit Margin analysis :**
+```sql
+select 
+    year(order_date) as order_year,
+    month(order_date) as order_month,
+    sum(profit) * 100 / sum(sale_price) as profit_margin, sum(profit) as profit, sum(sale_price) as sales
+from df_orders
+group by year(order_date), month(order_date)
+order by order_year, order_month
+```
+
+13. **Which Segment is most sensitive to Discounts :**
+```sql
+select 
+    segment,
+    avg(discount) as avg_discount,
+    sum(profit) as total_profit
+from df_orders
+group by segment
+order by avg_discount desc
+```
+
+14. **Which Products are consistently profitable over time (not just one-time hits) :**
+```sql
+with monthly_profit as (
+    select
+        product_id,
+        format(order_date, 'yyyy-MM') as order_month,
+        sum(profit) as monthly_profit
+    from df_orders
+    group by product_id, format(order_date, 'yyyy-MM')
+),
+profitability_score as (
+    select
+        product_id,
+        count(*) as total_months,
+        sum(case when monthly_profit > 0 then 1 else 0 end) as profitable_months
+    from monthly_profit
+    group by product_id
+)
+select *
+from profitability_score
+where profitable_months * 1.0 / total_months > = 0.8
+```
+
+15. **Identify Top 3 Products per Category by Profit contribution :**
+```sql
+with product_profit as (
+    select
+        category,
+        product_id,
+        sum(profit) as product_profit
+    from df_orders
+    group by category, product_id
+),
+ranked_products as (
+    SELECT * ,
+        rank() over (partition by category order by product_profit desc) as rnk
+    from product_profit
+)
+select *
+from ranked_products
+where rnk < = 3
+```
 
 
 
