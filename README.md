@@ -216,6 +216,7 @@ from df_orders
 group by year(order_date), month(order_date)
 order by order_year, order_month
 ```
+<img width="366" height="545" alt="Screenshot 2026-02-06 183325" src="https://github.com/user-attachments/assets/1aa6c35f-c77e-4235-934b-0845d8d03a30" />
 
 7. **Which Regions are driving most of the Revenue and Profit :** 
 ```sql
@@ -225,6 +226,7 @@ from df_orders
 group by region
 order by total_sales desc
 ```
+<img width="266" height="143" alt="Screenshot 2026-02-06 183602" src="https://github.com/user-attachments/assets/8c24eae1-25dc-48f0-9c10-5976282fb7c7" />
 
 8. **Which States are profitable and which are loss making :**
 ```sql
@@ -251,6 +253,7 @@ from df_orders
 group by segment
 order by avg_profit_per_order desc
 ```
+<img width="275" height="134" alt="Screenshot 2026-02-06 183835" src="https://github.com/user-attachments/assets/1c771329-0d73-42d0-994a-f09919a595e9" />
 
 10. **Which Ship Modes are most profitable :**
 ```sql
@@ -262,6 +265,7 @@ from df_orders
 group by ship_mode
 order by total_profit desc
 ```
+<img width="321" height="125" alt="Screenshot 2026-02-06 184024" src="https://github.com/user-attachments/assets/c958c353-7de1-4cc1-bcd7-d5e41f74929b" />
 
 11. **What is the average order value (AOV) by Region :**
 ```sql
@@ -272,6 +276,7 @@ from df_orders
 group by region
 order by avg_order_value desc
 ```
+<img width="232" height="150" alt="Screenshot 2026-02-06 184135" src="https://github.com/user-attachments/assets/dc49d0cd-dfcf-4b90-9c66-f333f57910a9" />
 
 12. **Monthly Profit Margin analysis :**
 ```sql
@@ -283,6 +288,7 @@ from df_orders
 group by year(order_date), month(order_date)
 order by order_year, order_month
 ```
+<img width="433" height="547" alt="Screenshot 2026-02-06 184401" src="https://github.com/user-attachments/assets/262f5d2d-a557-44cc-877c-b94740074721" />
 
 13. **Which Segment is most sensitive to Discounts :**
 ```sql
@@ -294,6 +300,7 @@ from df_orders
 group by segment
 order by avg_discount desc
 ```
+<img width="308" height="132" alt="Screenshot 2026-02-06 184529" src="https://github.com/user-attachments/assets/1b559c09-3b5e-4df2-a00c-ab2ee63cf7f2" />
 
 14. **Which Products are consistently profitable over time (not just one-time hits) :**
 ```sql
@@ -317,6 +324,7 @@ select *
 from profitability_score
 where profitable_months * 1.0 / total_months > = 0.8
 ```
+<img width="387" height="648" alt="Screenshot 2026-02-06 184704" src="https://github.com/user-attachments/assets/d585596d-bdce-471d-8132-7fc808cc6089" />
 
 15. **Identify Top 3 Products per Category by Profit contribution :**
 ```sql
@@ -337,6 +345,7 @@ select *
 from ranked_products
 where rnk < = 3
 ```
+<img width="409" height="250" alt="Screenshot 2026-02-06 184755" src="https://github.com/user-attachments/assets/2d5ff99f-3f4a-4879-b07a-4591b4e0d6e3" />
 
 ## Conclusion
 This project represents a complete end-to-end learning journey in data analytics, combining Python and SQL to derive meaningful insights from a retail orders dataset. From acquiring data via the Kaggle API to performing thorough data cleaning, transformation, and structured analysis in SQL Server, each phase demanded consistency, problem-solving, and attention to detail. The challenges encountered throughout the process strengthened my understanding of real-world data workflows and reinforced best practices in data handling and analysis. This work reflects not only my technical growth but also my perseverance, discipline, and genuine passion for transforming raw data into actionable business insights.
