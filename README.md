@@ -121,7 +121,7 @@ df.to_sql('df_orders', con=conn, index=False, if_exists='replace')
 ```
 
 ## Data Analysis
-The following SQL queries are designed to perform data analysis with the objective of answering key business and analytical questions:
+The following SQL queries are designed to perform data analysis with the objective of answering key business and analytical questions :
 
 ### Queries & Key Insights
 
